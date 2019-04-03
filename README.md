@@ -1,29 +1,45 @@
 Twitter Purge
 =============
 
-A systematic way to remove your tweets because we all say dumb things.  
+A systematic way to remove your tweets because we all say dumb things.
 This script will delete all your tweets after an specific number of days that you can change.
 
 ![Birdy](birdy.png)
 
 ## How to Install
 
-You will need some version of [Ruby](http://ruby-lang.org) and to have your own server, I guess. After that:
+This is a fork from littlemove's fork from marcelinollano's original repo. The difference with this fork is that it's been deployed to Heroku and so I had to make some changes.
 
-1. Put the `twitter-purge.rb` script in your server, I use `/usr/local/sbin`.
-2. Install the Twitter gem with the command `gem install twitter`.
-3. Register a new Twitter application on [Twitter Application Management](https://apps.twitter.com/).
-4. Update the variables at the top of the script with your stuff.
-5. Make the file executable `sudo chmod +x /usr/local/sbin/twitter-purge`
-6. Add a new crontab entry with the command `sudo crontab -e`.
-7. If you want to check daily add `0 0 * * * /usr/local/sbin/twitter-purge`.
-8. Save and exit. You are done!
+So, with this fork you will need an Heroku account and an app created. Once you have that:
+
+1. Register a new Twitter application on [Twitter Application Management](https://apps.twitter.com/).
+
+2. Set the ENV variables with your own data so the script can read them:
+
+```
+heroku config:set USERNAME=data-from-twitter
+heroku config:set CONSUMER_KEY=data-from-twitter
+heroku config:set CONSUMER_SECRET=data-from-twitter
+heroku config:set ACCESS_TOKEN=data-from-twitter
+heroku config:set ACCESS_TOKEN_SECRET=data-from-twitter
+heroku config:set DAYS_TO_KEEP=7
+```
+
+3. Push the code to your heroku app.
+
+`git push heroku master`
+
+4. Configure the Heroku scheduler addon in your app.
+
+5. Create a new job with your desired frequency that runs `ruby twitter-purge.rb`
 
 ## Too Many Attempts
 
 If you have been using Twitter for a while the script will fail. The reason is simple, Twitter does not allow to delete a lot of tweets in one go. The API will throw something like `TooManyAttempts`. You just can not make a lot of requests and they block you. How many requests? Well, when I tried a while ago it was something like 150 requests.
 
 What I did the first time was to trigger the script several times and then wait and trigger again until I had no tweets. After that the script works like a charm. I set my `DAYS_TO_KEEP` to `7` to keep a week and that number is very rarely more than 150 tweets.
+
+In this Heroku version, at first I set the frequency to 10 minutes. This will create a lot of `TooManyAttempts` errors, but it gets executed more frequently than with the hourly option. After this initial process I set to a Daily frequency.
 
 ## But, Marce, Why?!!
 
