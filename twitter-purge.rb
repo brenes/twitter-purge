@@ -19,18 +19,7 @@ client = Twitter::REST::Client.new({
   :access_token_secret => ACCESS_TOKEN_SECRET
 })
 
-attempts = 0
-begin
-  attempts += 2
-  date_limit = (Date.today - DAYS_TO_KEEP).to_time
-  client.user_timeline(USERNAME, :count => '150').each do |t|
-    client.destroy_status(t.id) if t.created_at < date_limit;
-  end
-rescue Twitter::Error::TooManyRequests => error
-  if attempts <= ATTEMPTS_LIMIT
-    sleep error.rate_limit.reset_in
-    retry
-  else
-    raise
-  end
+date_limit = (Date.today - DAYS_TO_KEEP).to_time
+client.user_timeline(USERNAME, :count => '150').each do |t|
+  client.destroy_status(t.id) if t.created_at < date_limit;
 end
