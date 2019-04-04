@@ -12,7 +12,7 @@ ACCESS_TOKEN_SECRET = ENV['ACCESS_TOKEN_SECRET']
 DAYS_TO_KEEP        = ENV['DAYS_TO_KEEP'].to_i
 
 # security measure so a bad heroku config doesn't remove all your tweets
-unless ENV['DAYS_TO_KEEP'].blank?
+unless ENV['DAYS_TO_KEEP'].empty?
   client = Twitter::REST::Client.new({
     :consumer_key        => CONSUMER_KEY,
     :consumer_secret     => CONSUMER_SECRET,
