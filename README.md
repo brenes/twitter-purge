@@ -2,7 +2,9 @@ Twitter Purge
 =============
 
 A systematic way to remove your tweets because we all say dumb things.
-This script will delete all your tweets after an specific number of days that you can change.
+This script will delete all your tweets after an specific number of days that you can change. Well, in fact, not all the tweets since the Twitter API only return the last 3,200 published ones.
+
+The rest of them are in a limbo. They won't be accessible through your timeline if someone aved them (as in fav them) they can read them.
 
 ![Birdy](birdy.png)
 
